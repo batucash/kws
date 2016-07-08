@@ -43,9 +43,9 @@ int main(int argc, char *argv[]){
     uword index = 0;
     vector<uword> filtered_train;
     vector<uword> filtered_labels;
-
+    segments[0].clear();
     for (uword i=1;i<NUMPHONES;i++){
-        uvec dummyIter = shuffle(regspace<uvec> (0, 1, segments[i].size()));
+        uvec dummyIter = shuffle(regspace<uvec> (0, 1, segments[i].size()-1));
         index=0;
         if (segments[i].size()!=0){
             while((index<subsetSize)&&(index<segments[i].size())){
@@ -53,6 +53,7 @@ int main(int argc, char *argv[]){
                 filtered_labels.push_back(i);
                 index++;
             }
+            segments[i].clear();
         }
     }
     
@@ -83,6 +84,10 @@ int main(int argc, char *argv[]){
     
         }
     }
+    
+    //  3.1.    Train an autoencoder on the whole training set
+    //  3.2.    Extend the friends set to match the size of foes set
+    //  3.3.    Concatenate two sets into one DML training set
      
     
 
@@ -110,8 +115,8 @@ int main(int argc, char *argv[]){
     float orig_friend, orig_foe, new_friend, new_foe;
     orig_foe = 0.0;
     orig_friend = 0.0;
-    uvec foe_iterator = shuffle(regspace <uvec> (0,1,foeSet.size()));
-    uvec friend_iterator = shuffle(regspace <uvec> (0,1,friendSet.size()));
+    uvec foe_iterator = shuffle(regspace <uvec> (0,1,foeSet.size()-1));
+    uvec friend_iterator = shuffle(regspace <uvec> (0,1,friendSet.size()-1));
     float del_J = 0.0;
     bool flag1 = true;
     bool flag2 = true;
